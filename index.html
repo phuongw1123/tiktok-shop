@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quy trình mua hàng</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Quy trình mua hàng Tiktok</h1>
+    </header>
+
+    <!-- Đăng nhập / Đăng ký -->
+<div id="login-register">
+    <h2>Đăng nhập / Đăng ký</h2>
+    
+    <!-- Form đăng nhập -->
+    <form id="login-form" onsubmit="return handleLogin(event)">
+        <label for="username">Tên đăng nhập:</label>
+        <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+        <button type="submit">Đăng nhập</button>
+    </form>
+    <p>Chưa có tài khoản? <a href="javascript:void(0);" onclick="showRegisterForm()">Đăng ký</a></p>
+
+    <!-- Form đăng ký -->
+    <div id="register-form" style="display:none;">
+        <h3>Đăng ký tài khoản</h3>
+        <form onsubmit="return handleRegister(event)">
+            <label for="register-username">Tên đăng nhập:</label>
+            <input type="text" id="register-username" placeholder="Tên đăng nhập" required>
+            <label for="register-password">Mật khẩu:</label>
+            <input type="password" id="register-password" placeholder="Mật khẩu" required>
+            <button type="submit">Đăng ký</button>
+        </form>
+        <p>Đã có tài khoản? <a href="javascript:void(0);" onclick="showLoginForm()">Đăng nhập</a></p>
+    </div>
+</div>
+
+    </div>
+
+    <main id="process-flow">
+        <!-- Tab navigation -->
+        <div class="tabs">
+            <button class="tab-button" onclick="showTab('buyer')">Người mua</button>
+            <button class="tab-button" onclick="showTab('system')">Hệ thống</button>
+            <button class="tab-button" onclick="showTab('seller')">Người bán</button>
+        </div>
+
+        <!-- Content for each tab -->
+        <div id="buyer" class="tab-content">
+            <h2>Người mua</h2>
+            <img src="1.png" alt="Quy trình mua hàng" width="800">
+
+            <!-- Chọn sản phẩm -->
+           <!-- Chọn sản phẩm -->
+<div class="step">
+    <p>1. Chọn sản phẩm</p>
+    <img src="d.png" alt="Quy trình mua hàng" width="400">
+
+    <select id="product-list" onchange="updatePriceAndImage()">
+        <option value="0" data-img="">Chọn sản phẩm</option>
+        <option value="50000" data-img="a.png">Sản phẩm 1 - 50,000đ</option>
+        <option value="100000" data-img="b.png">Sản phẩm 2 - 100,000đ</option>
+        <option value="150000" data-img="f.png">Sản phẩm 3 - 150,000đ</option>
+    </select>
+    <p id="product-price">Giá: 0đ</p>
+    <img id="product-image" src="" alt="Product Image" style="display:none; width: 100px; height: auto;">
+    <button onclick="addToCart()">Thêm vào giỏ hàng</button>
+</div>
+
+
+            <!-- Giỏ hàng -->
+            <div class="step">
+                <p>2. Giỏ hàng</p>
+                <ul id="cart-items"></ul>
+                <button onclick="clearCart()">Xóa giỏ hàng</button>
+            </div>
+            <!-- Nhập thông tin -->
+            <div class="step">
+                <p>3. Nhập thông tin cá nhân</p>
+                <input type="text" id="customer-name" placeholder="Họ và tên">
+                <input type="text" id="customer-address" placeholder="Địa chỉ giao hàng">
+                <input type="text" id="customer-phone" placeholder="Số điện thoại">
+                <button onclick="saveCustomerInfo()">Lưu thông tin</button>
+            </div>
+            <!-- Thanh toán -->
+            <div class="step">
+                <p>4. Thanh toán</p>
+                <p id="total-amount">Tổng tiền: 0đ</p>
+                <button onclick="proceedToPayment()">Thanh toán</button>
+            </div>
+            <!-- Nhận hàng -->
+            <div class="step">
+                <p>5. Nhận hàng</p>
+                <button id="received-btn" onclick="markAsReceived()" style="display:none;">Đã nhận hàng</button>
+            </div>
+        </div>
+
+        <div id="system" class="tab-content" style="display:none;">
+            <h2>Hệ thống</h2>
+            <div class="image-container">
+                <img src="8.png" alt="Quy trình mua hàng" width="400">
+                <div class="text-overlay">
+                    <p>Trạng thái</p>
+                    <p id="system-message">Đang chờ hành động...</p>
+                </div>
+            </div>
+            <div class="step">
+                <p id="system-message">Đây là hệ thống bán hàng tiktok được thực hiện bởi Louis Vũ!...</p>
+            </div>
+        </div>
+        
+        <div id="seller" class="tab-content" style="display:none;">
+            <h2>Người bán</h2>
+            <img src="9.png" alt="Quy trình mua hàng" width="600">
+            <div class="step">
+                <p>1. Xác nhận đơn hàng</p>
+                <button onclick="acceptOrder()">Chấp nhận</button>
+                <button onclick="rejectOrder()">Từ chối</button>
+            </div>
+            <div class="step">
+                <p>2. Thông tin đơn hàng</p>
+                <div id="order-info">
+                    <p><strong>Tên khách hàng:</strong> <span id="order-name">Chưa có</span></p>
+                    <p><strong>Địa chỉ giao hàng:</strong> <span id="order-address">Chưa có</span></p>
+                    <p><strong>Số điện thoại:</strong> <span id="order-phone">Chưa có</span></p>
+                    <p><strong>Sản phẩm đã chọn:</strong> <span id="order-product">Chưa có</span></p>
+                    <p><strong>Tổng tiền:</strong> <span id="order-total">0đ</span></p>
+                </div>
+                <button onclick="markAsDelivered()">Đã giao hàng</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 - Thiết kế bởi Nhóm 49</p>
+    </footer>
+
+    <script>
+        // Function to show selected tab
+        function showTab(tabId) {
+            var tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        // Function to handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            document.getElementById('login-register').style.display = 'none';
+            document.getElementById('process-flow').style.display = 'block';
+        }
+
+        // Function to handle registration
+function handleRegister(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('register-username').value;
+    const password = document.getElementById('register-password').value;
+
+    if (username && password) {
+        // Đăng ký thành công
+        isLoggedIn = true; // Đánh dấu trạng thái đăng nhập
+
+        // Hiển thị thông báo đăng ký thành công
+        alert('Đăng ký thành công! Bạn đã được đăng nhập.');
+
+        // Ẩn form đăng ký và hiển thị phần quy trình
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('login-register').style.display = 'none';
+        document.getElementById('process-flow').style.display = 'block';
+
+        // Hiển thị tab "Người mua" như đăng nhập thành công
+        showTab('buyer');
+    } else {
+        alert('Vui lòng nhập đầy đủ thông tin đăng ký.');
+    }
+}
+
+
+        // Show register form
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        // Show login form
+        function showLoginForm() {
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        // Function to preview image when selecting a file
+        function previewImage() {
+            const file = document.getElementById('product-image').files[0];
+            const preview = document.getElementById('preview');
+            const imagePreview = document.getElementById('image-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        }
+
+        // Add product to admin product list
+        function addProduct() {
+            const productName = document.getElementById('product-name').value;
+            const productPrice = document.getElementById('product-price').value;
+
+            if (productName && productPrice) {
+                const productList = document.getElementById('product-list');
+                const li = document.createElement('li');
+                li.textContent = `${productName} - ${productPrice}đ`;
+                productList.appendChild(li);
+                document.getElementById('product-name').value = '';
+                document.getElementById('product-price').value = '';
+            } else {
+                alert('Vui lòng nhập đầy đủ thông tin sản phẩm.');
+            }
+        }
+    </script>
+</body>
+
+</html>
