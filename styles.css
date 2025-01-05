@@ -79,8 +79,7 @@ header h1 {
 #login-register {
     width: 100%;
     max-width: 400px;
-    margin: 0 auto;
-    margin-top: 150px !important;
+    margin: 150px 0 auto;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
